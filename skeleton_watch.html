@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skeleton Watch</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #0a1128 0%, #1a2347 100%);
+            overflow: hidden;
+        }
+
+        .watch-container {
+            position: relative;
+            width: min(80vmin, 600px);
+            height: min(80vmin, 600px);
+            filter: drop-shadow(0 30px 80px rgba(212, 175, 55, 0.3));
+        }
+
+        .watch-case {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #f4e4c1, #d4af37);
+            box-shadow: 
+                inset 0 0 40px rgba(212, 175, 55, 0.6),
+                0 15px 60px rgba(0, 0, 0, 0.6),
+                inset -3px -3px 20px rgba(0, 0, 0, 0.2),
+                inset 3px 3px 20px rgba(255, 255, 255, 0.4);
+        }
+
+        .watch-bezel {
+            position: absolute;
+            width: 95%;
+            height: 95%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            background: linear-gradient(145deg, #e6d8b5, #c9a961);
+            box-shadow: 
+                inset 0 3px 15px rgba(255, 255, 255, 0.8),
+                inset 0 -3px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        .watch-crystal {
+            position: absolute;
+            width: 90%;
+            height: 90%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            background: radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.4), transparent 50%);
+            backdrop-filter: blur(0.5px);
+        }
+
+        .watch-face {
+            position: absolute;
+            width: 85%;
+            height: 85%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.98), rgba(250, 248, 245, 0.95));
+            overflow: hidden;
+            box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .mechanics-layer {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            opacity: 0.15;
+        }
+
+        /* Main gear wheel */
+        .gear-main {
+            position: absolute;
+            width: 60%;
+            height: 60%;
+            top: 20%;
+            left: 20%;
+            animation: rotate-slow 60s linear infinite;
+        }
+
+        .gear-secondary-1 {
+            position: absolute;
+            width: 22%;
+            height: 22%;
+            top: 18%;
+            left: 62%;
+            animation: rotate-medium 8s linear infinite reverse;
+        }
+
+        .gear-secondary-2 {
+            position: absolute;
+            width: 18%;
+            height: 18%;
+            bottom: 22%;
+            left: 22%;
+            animation: rotate-fast 4s linear infinite;
+        }
+
+        .gear-secondary-3 {
+            position: absolute;
+            width: 16%;
+            height: 16%;
+            bottom: 28%;
+            right: 28%;
+            animation: rotate-medium 6s linear infinite reverse;
+        }
+
+        .gear-tiny-1 {
+            position: absolute;
+            width: 12%;
+            height: 12%;
+            top: 38%;
+            left: 28%;
+            animation: rotate-fast 3s linear infinite;
+        }
+
+        .gear-tiny-2 {
+            position: absolute;
+            width: 10%;
+            height: 10%;
+            top: 48%;
+            right: 24%;
+            animation: rotate-fast 2.5s linear infinite reverse;
+        }
+
+        .balance-wheel {
+            position: absolute;
+            width: 14%;
+            height: 14%;
+            top: 43%;
+            left: 43%;
+            animation: oscillate 0.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes rotate-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes rotate-medium {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes rotate-fast {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes oscillate {
+            from { transform: rotate(-30deg); }
+            to { transform: rotate(30deg); }
+        }
+
+        .gear {
+            fill: none;
+            stroke: #d4af37;
+            stroke-width: 1.5;
+            filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+        }
+
+        .gear-center {
+            fill: #d4af37;
+        }
+
+        .balance-rim {
+            fill: none;
+            stroke: #d4af37;
+            stroke-width: 2.5;
+        }
+
+        .balance-spokes {
+            stroke: #d4af37;
+            stroke-width: 1.5;
+        }
+
+        /* Roman numerals */
+        .numerals {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+        }
+
+        .numeral {
+            position: absolute;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            font-size: 2.8vmin;
+            font-weight: 300;
+            color: #3a3a3a;
+            font-style: italic;
+            text-align: center;
+            transform: translate(-50%, -50%);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Delicate minute markers */
+        .minute-markers {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+        }
+
+        .minute-marker {
+            position: absolute;
+            width: 1px;
+            height: 2.5%;
+            background: linear-gradient(to bottom, transparent, #b0b0b0, transparent);
+            left: 50%;
+            top: 3%;
+            transform-origin: 50% 1950%;
+            margin-left: -0.5px;
+        }
+
+        /* Hour markers - more prominent */
+        .hour-marker {
+            position: absolute;
+            width: 1.5px;
+            height: 3.5%;
+            background: linear-gradient(to bottom, #8a8a8a, #5a5a5a);
+            left: 50%;
+            top: 3%;
+            transform-origin: 50% 1364%;
+            margin-left: -0.75px;
+        }
+
+        /* Center hub */
+        .center-hub {
+            position: absolute;
+            width: 5%;
+            height: 5%;
+            top: 47.5%;
+            left: 47.5%;
+            border-radius: 50%;
+            background: radial-gradient(circle, #f4e4c1, #d4af37);
+            box-shadow: 
+                0 3px 10px rgba(0, 0, 0, 0.4),
+                inset 0 1px 3px rgba(255, 255, 255, 0.6),
+                inset 0 -1px 2px rgba(0, 0, 0, 0.3);
+            z-index: 100;
+            border: 1px solid rgba(212, 175, 55, 0.6);
+        }
+
+        /* Elegant watch hands */
+        .hand {
+            position: absolute;
+            bottom: 50%;
+            left: 50%;
+            transform-origin: 50% 100%;
+            transition: transform 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+
+        .hour-hand {
+            width: 3%;
+            height: 22%;
+            margin-left: -1.5%;
+            z-index: 30;
+            background: linear-gradient(to top, #d4af37, #f4e4c1);
+            clip-path: polygon(50% 0%, 100% 5%, 90% 100%, 10% 100%, 0% 5%);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+            filter: drop-shadow(0 1px 2px rgba(212, 175, 55, 0.6));
+        }
+
+        .minute-hand {
+            width: 2.5%;
+            height: 32%;
+            margin-left: -1.25%;
+            z-index: 40;
+            background: linear-gradient(to top, #d4af37, #f4e4c1);
+            clip-path: polygon(50% 0%, 100% 3%, 95% 100%, 5% 100%, 0% 3%);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+            filter: drop-shadow(0 1px 2px rgba(212, 175, 55, 0.6));
+        }
+
+        .second-hand {
+            width: 1%;
+            height: 38%;
+            margin-left: -0.5%;
+            z-index: 50;
+            background: linear-gradient(to top, #4a4a4a, #6a6a6a);
+            clip-path: polygon(50% 0%, 100% 2%, 100% 100%, 0% 100%, 0% 2%);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+            transition: transform 0.1s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+
+        .second-hand::before {
+            content: '';
+            position: absolute;
+            width: 400%;
+            height: 400%;
+            background: radial-gradient(circle, #5a5a5a, transparent);
+            border-radius: 50%;
+            top: -200%;
+            left: -150%;
+        }
+
+        /* Sub-dial for continuous seconds display */
+        .sub-dial {
+            position: absolute;
+            width: 20%;
+            height: 20%;
+            bottom: 15%;
+            left: 40%;
+            border-radius: 50%;
+            border: 1px solid rgba(100, 100, 100, 0.3);
+            background: rgba(255, 255, 255, 0.5);
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .sub-dial-hand {
+            position: absolute;
+            width: 1.5%;
+            height: 35%;
+            bottom: 50%;
+            left: 50%;
+            margin-left: -0.75%;
+            background: linear-gradient(to top, #5a5a5a, #7a7a7a);
+            transform-origin: 50% 100%;
+            clip-path: polygon(50% 0%, 100% 10%, 100% 100%, 0% 100%, 0% 10%);
+        }
+    </style>
+</head>
+<body>
+    <div class="watch-container">
+        <div class="watch-case"></div>
+        <div class="watch-bezel"></div>
+        <div class="watch-crystal"></div>
+        <div class="watch-face">
+            <!-- Mechanical layers -->
+            <div class="mechanics-layer">
+                <svg class="gear-main" viewBox="0 0 100 100">
+                    <circle class="gear-center" cx="50" cy="50" r="12"/>
+                    <g class="gear">
+                        <circle cx="50" cy="50" r="35"/>
+                        <path d="M50,10 L55,15 L45,15 Z M85,35 L90,40 L80,40 Z M90,50 L85,55 L85,45 Z M85,65 L90,60 L80,60 Z M50,90 L55,85 L45,85 Z M15,65 L10,60 L20,60 Z M10,50 L15,45 L15,55 Z M15,35 L10,40 L20,40 Z"/>
+                    </g>
+                </svg>
+
+                <svg class="gear-secondary-1" viewBox="0 0 100 100">
+                    <circle class="gear-center" cx="50" cy="50" r="10"/>
+                    <g class="gear">
+                        <circle cx="50" cy="50" r="30"/>
+                        <path d="M50,15 L52,20 L48,20 Z M70,25 L75,30 L68,32 Z M80,50 L75,52 L75,48 Z M70,75 L75,70 L68,68 Z M50,85 L52,80 L48,80 Z M30,75 L25,70 L32,68 Z M20,50 L25,48 L25,52 Z M30,25 L25,30 L32,32 Z"/>
+                    </g>
+                </svg>
+
+                <svg class="gear-secondary-2" viewBox="0 0 100 100">
+                    <circle class="gear-center" cx="50" cy="50" r="9"/>
+                    <g class="gear">
+                        <circle cx="50" cy="50" r="28"/>
+                    </g>
+                </svg>
+
+                <svg class="gear-secondary-3" viewBox="0 0 100 100">
+                    <circle class="gear-center" cx="50" cy="50" r="8"/>
+                    <g class="gear">
+                        <circle cx="50" cy="50" r="26"/>
+                    </g>
+                </svg>
+
+                <svg class="gear-tiny-1" viewBox="0 0 100 100">
+                    <circle class="gear-center" cx="50" cy="50" r="10"/>
+                    <g class="gear">
+                        <circle cx="50" cy="50" r="24"/>
+                    </g>
+                </svg>
+
+                <svg class="gear-tiny-2" viewBox="0 0 100 100">
+                    <circle class="gear-center" cx="50" cy="50" r="10"/>
+                    <g class="gear">
+                        <circle cx="50" cy="50" r="22"/>
+                    </g>
+                </svg>
+
+                <svg class="balance-wheel" viewBox="0 0 100 100">
+                    <circle class="balance-rim" cx="50" cy="50" r="35" stroke-width="3"/>
+                    <line class="balance-spokes" x1="50" y1="15" x2="50" y2="85"/>
+                    <line class="balance-spokes" x1="15" y1="50" x2="85" y2="50"/>
+                    <circle class="gear-center" cx="50" cy="50" r="7"/>
+                </svg>
+            </div>
+
+            <!-- Delicate minute markers -->
+            <div class="minute-markers" id="minuteMarkers"></div>
+
+            <!-- Numerals -->
+            <div class="numerals" id="numerals"></div>
+
+            <!-- Sub-dial for smooth seconds -->
+            <div class="sub-dial">
+                <div class="sub-dial-hand" id="subDialHand"></div>
+            </div>
+
+            <!-- Watch hands -->
+            <div class="hand hour-hand" id="hourHand"></div>
+            <div class="hand minute-hand" id="minuteHand"></div>
+            <div class="hand second-hand" id="secondHand"></div>
+            
+            <!-- Center hub -->
+            <div class="center-hub"></div>
+        </div>
+    </div>
+
+    <script>
+        // Create minute markers (60 total)
+        const minuteMarkersContainer = document.getElementById('minuteMarkers');
+        for (let i = 0; i < 60; i++) {
+            if (i % 5 !== 0) { // Skip positions where hour markers will be
+                const marker = document.createElement('div');
+                marker.className = 'minute-marker';
+                marker.style.transform = `rotate(${i * 6}deg)`;
+                minuteMarkersContainer.appendChild(marker);
+            }
+        }
+
+        // Create hour markers (12 total)
+        for (let i = 0; i < 12; i++) {
+            const marker = document.createElement('div');
+            marker.className = 'hour-marker';
+            marker.style.transform = `rotate(${i * 30}deg)`;
+            minuteMarkersContainer.appendChild(marker);
+        }
+
+        // Create elegant cursive numerals
+        const numeralsContainer = document.getElementById('numerals');
+        const numerals = ['12', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'];
+        const radius = 42; // percentage from center - positioned outside hour markers
+
+        numerals.forEach((num, index) => {
+            const angle = (index * 30 - 90) * (Math.PI / 180);
+            const x = 50 + radius * Math.cos(angle);
+            const y = 50 + radius * Math.sin(angle);
+            
+            const numeral = document.createElement('div');
+            numeral.className = 'numeral';
+            numeral.textContent = num;
+            numeral.style.left = x + '%';
+            numeral.style.top = y + '%';
+            numeralsContainer.appendChild(numeral);
+        });
+
+        let lastSecond = -1;
+        let lastMinute = -1;
+        let lastHour = -1;
+        let currentSecondRotation = 0;
+
+        // Update watch hands with ticking motion
+        function updateTime() {
+            const now = new Date();
+            const hours = now.getHours() % 12;
+            const minutes = now.getMinutes();
+            const seconds = now.getSeconds();
+            const milliseconds = now.getMilliseconds();
+
+            // Smooth sub-dial seconds
+            const subDialAngle = ((seconds + milliseconds / 1000) * 6);
+            document.getElementById('subDialHand').style.transform = `rotate(${subDialAngle}deg)`;
+
+            // Ticking second hand - always increment forward
+            if (seconds !== lastSecond) {
+                if (lastSecond !== -1) {
+                    // Always add 6 degrees (one second) to maintain continuous forward motion
+                    currentSecondRotation += 6;
+                } else {
+                    // Initial setup
+                    currentSecondRotation = seconds * 6;
+                }
+                
+                document.getElementById('secondHand').style.transform = `rotate(${currentSecondRotation}deg)`;
+                lastSecond = seconds;
+            }
+
+            // Ticking minute hand
+            if (minutes !== lastMinute) {
+                const minuteAngle = minutes * 6;
+                document.getElementById('minuteHand').style.transform = `rotate(${minuteAngle}deg)`;
+                lastMinute = minutes;
+            }
+
+            // Ticking hour hand (moves every minute)
+            const currentHourSegment = hours * 60 + minutes;
+            const lastHourSegment = lastHour * 60 + (lastMinute === -1 ? 0 : lastMinute);
+            
+            if (currentHourSegment !== lastHourSegment) {
+                const hourAngle = (hours * 30) + (minutes * 0.5);
+                document.getElementById('hourHand').style.transform = `rotate(${hourAngle}deg)`;
+                lastHour = hours;
+            }
+        }
+
+        updateTime();
+        setInterval(updateTime, 50);
+    </script>
+</body>
+</html>
